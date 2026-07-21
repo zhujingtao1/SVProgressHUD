@@ -783,6 +783,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
             
             // Update text and set progress to the given value
             strongSelf.statusLabel.hidden = status.length == 0;
+            strongSelf.statusLabel.font = strongSelf.font;
             strongSelf.statusLabel.text = status;
             strongSelf.progress = progress;
             
@@ -871,6 +872,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
             
             // Update text
             strongSelf.statusLabel.hidden = status.length == 0;
+            strongSelf.statusLabel.font = strongSelf.font;
             strongSelf.statusLabel.text = status;
             
             // Fade in delayed if a grace time is set
