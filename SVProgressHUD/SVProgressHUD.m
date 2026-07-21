@@ -476,20 +476,29 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     CGFloat hudWidth;
     CGFloat hudHeight;
     
+    CGFloat imageLabelWidth = labelWidth;
+    CGFloat imageLabelHeight = labelHeight;
+    
+    
     CGFloat contentWidth = 0.0f;
     CGFloat contentHeight = 0.0f;
     
-    if(imageUsed || progressUsed) {
-        contentWidth = CGRectGetWidth(imageUsed ? self.imageView.frame : self.indefiniteAnimatedView.frame);
-        contentHeight = CGRectGetHeight(imageUsed ? self.imageView.frame : self.indefiniteAnimatedView.frame);
+    if (imageUsed) {
+        imageLabelWidth = labelWidth + self.imageViewSize.width;
+        imageLabelHeight = MAX(labelHeight, self.imageViewSize.height);
+    }
+    
+    if(progressUsed) {
+        contentWidth = CGRectGetWidth(self.indefiniteAnimatedView.frame);
+        contentHeight = CGRectGetHeight(self.indefiniteAnimatedView.frame);
     }
     
     // |-spacing-content-spacing-|
-    hudWidth = SVProgressHUDHorizontalSpacing + MAX(labelWidth, contentWidth) + SVProgressHUDHorizontalSpacing;
+    hudWidth = SVProgressHUDHorizontalSpacing + MAX(imageLabelWidth, contentWidth) + SVProgressHUDHorizontalSpacing;
     
     // |-spacing-content-(labelSpacing-label-)spacing-|
-    hudHeight = SVProgressHUDVerticalSpacing + labelHeight + contentHeight + SVProgressHUDVerticalSpacing;
-    if(self.statusLabel.text && (imageUsed || progressUsed)){
+    hudHeight = SVProgressHUDVerticalSpacing + imageLabelHeight + contentHeight + SVProgressHUDVerticalSpacing;
+    if(self.statusLabel.text && progressUsed){
         // Add spacing if both content and label are used
         hudHeight += SVProgressHUDLabelSpacing;
     }
@@ -513,16 +522,16 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     if(self.progress != SVProgressHUDUndefinedProgress) {
         self.backgroundRingView.center = self.ringView.center = CGPointMake(CGRectGetMidX(self.hudView.bounds), centerY);
     }
-    self.imageView.center = CGPointMake(CGRectGetMidX(self.hudView.bounds), centerY);
 
     // Label
-    if(imageUsed || progressUsed) {
+    if(progressUsed) {
         centerY = CGRectGetMaxY(imageUsed ? self.imageView.frame : self.indefiniteAnimatedView.frame) + SVProgressHUDLabelSpacing + labelHeight / 2.0f;
     } else {
         centerY = CGRectGetMidY(self.hudView.bounds);
     }
     self.statusLabel.frame = labelRect;
-    self.statusLabel.center = CGPointMake(CGRectGetMidX(self.hudView.bounds), centerY);
+    self.statusLabel.center = CGPointMake(CGRectGetMidX(self.hudView.bounds) + self.imageViewSize.width/2.0, centerY);
+    self.imageView.center = CGPointMake(SVProgressHUDVerticalSpacing + self.imageViewSize.width/2.0, centerY);
     
     [CATransaction commit];
 }
@@ -1332,6 +1341,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     
     if(!_imageView) {
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, _imageViewSize.width, _imageViewSize.height)];
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     if(!_imageView.superview) {
         [self.hudView.contentView addSubview:_imageView];
