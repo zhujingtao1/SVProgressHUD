@@ -85,6 +85,10 @@ typedef void (^SVProgressHUDDismissCompletion)(void);
 /// @discussion Default: CGSizeZero.
 @property (assign, nonatomic) CGSize minimumSize UI_APPEARANCE_SELECTOR;
 
+/// Status label 的约束大小，用于计算text 的宽度和高度
+/// @discussion Default: CGSizeMake(200.0f, 300.0f).
+@property (assign, nonatomic) CGSize textConstraintSize UI_APPEARANCE_SELECTOR;
+
 /// Thickness of the ring shown in the HUD.
 /// @discussion Default: 2 pt.
 @property (assign, nonatomic) CGFloat ringThickness UI_APPEARANCE_SELECTOR;
@@ -202,6 +206,8 @@ typedef void (^SVProgressHUDDismissCompletion)(void);
 /// Sets the minimum size for the HUD.
 /// @param minimumSize The minimum size for the HUD.
 + (void)setMinimumSize:(CGSize)minimumSize;
+
++ (void)setTextConstraintSize:(CGSize)textConstraintSize;
 
 /// Sets the ring thickness for the HUD.
 /// @param ringThickness Thickness of the ring.

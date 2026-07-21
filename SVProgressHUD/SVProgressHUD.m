@@ -173,6 +173,10 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     [self sharedView].minimumSize = minimumSize;
 }
 
++ (void)setTextConstraintSize:(CGSize)textConstraintSize {
+    [self sharedView].textConstraintSize = textConstraintSize;
+}
+
 + (void)setRingThickness:(CGFloat)ringThickness {
     [self sharedView].ringThickness = ringThickness;
 }
@@ -402,6 +406,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
         _defaultStyle = SVProgressHUDStyleAutomatic;
         _defaultAnimationType = SVProgressHUDAnimationTypeFlat;
         _minimumSize = CGSizeZero;
+        _textConstraintSize = CGSizeMake(200.0f, 300.0f);
         _font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         
         _imageViewSize = CGSizeMake(28.0f, 28.0f);
@@ -457,8 +462,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     CGFloat labelWidth = 0.0f;
     
     if(self.statusLabel.text) {
-        CGSize constraintSize = CGSizeMake(200.0f, 300.0f);
-        labelRect = [self.statusLabel.text boundingRectWithSize:constraintSize
+        labelRect = [self.statusLabel.text boundingRectWithSize:self.textConstraintSize
                                                         options:(NSStringDrawingOptions)(NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin)
                                                      attributes:@{NSFontAttributeName: self.statusLabel.font}
                                                         context:NULL];
@@ -1485,6 +1489,10 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 
 - (void)setMinimumSize:(CGSize)minimumSize {
     if (!_isInitializing) _minimumSize = minimumSize;
+}
+
+-(void)setTextConstraintSize:(CGSize)textConstraintSize {
+    if (!_isInitializing) _textConstraintSize = textConstraintSize;
 }
 
 - (void)setRingThickness:(CGFloat)ringThickness {
