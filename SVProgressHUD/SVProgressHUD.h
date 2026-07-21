@@ -125,10 +125,6 @@ typedef void (^SVProgressHUDDismissCompletion)(void);
 /// @discussion Default: [UIColor colorWithWhite:0 alpha:0.4].
 @property (strong, nonatomic, nonnull) UIColor *backgroundLayerColor UI_APPEARANCE_SELECTOR;
 
-/// Size of any images displayed within the HUD.
-/// @discussion Default: 28x28 pt.
-@property (assign, nonatomic) CGSize imageViewSize UI_APPEARANCE_SELECTOR;
-
 /// Indicates whether images within the HUD should be tinted.
 /// @discussion Default: YES.
 @property (assign, nonatomic) BOOL shouldTintImages UI_APPEARANCE_SELECTOR;
@@ -260,10 +256,6 @@ typedef void (^SVProgressHUDDismissCompletion)(void);
 /// Sets the background layer color for the HUD.
 /// @param color Desired color for the background layer.
 + (void)setBackgroundLayerColor:(nonnull UIColor*)color;
-
-/// Sets the size for the HUD's image view.
-/// @param size Desired size for the image view.
-+ (void)setImageViewSize:(CGSize)size;
 
 /// Determines if images should be tinted in the HUD.
 /// @param shouldTintImages Whether images should be tinted.

@@ -26,9 +26,10 @@ NSString * const SVProgressHUDStatusUserInfoKey = @"SVProgressHUDStatusUserInfoK
 static const CGFloat SVProgressHUDParallaxDepthPoints = 10.0f;
 static const CGFloat SVProgressHUDUndefinedProgress = -1;
 static const CGFloat SVProgressHUDDefaultAnimationDuration = 0.15f;
-static const CGFloat SVProgressHUDVerticalSpacing = 12.0f;
-static const CGFloat SVProgressHUDHorizontalSpacing = 12.0f;
+static const CGFloat SVProgressHUDVerticalSpacing = 7.0f;
+static const CGFloat SVProgressHUDHorizontalSpacing = 16.0f;
 static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
+static const CGFloat SVProgressHUDImageLabelSpacing = 10.0f;
 
 
 @interface SVProgressHUD ()
@@ -229,10 +230,6 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     [self sharedView].backgroundLayerColor = color;
 }
 
-+ (void)setImageViewSize:(CGSize)size {
-    [self sharedView].imageViewSize = size;
-}
-
 + (void)setShouldTintImages:(BOOL)shouldTintImages {
     [self sharedView].shouldTintImages = shouldTintImages;
 }
@@ -408,8 +405,6 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
         _minimumSize = CGSizeZero;
         _textConstraintSize = CGSizeMake(200.0f, 300.0f);
         _font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-        
-        _imageViewSize = CGSizeMake(28.0f, 28.0f);
         _shouldTintImages = YES;
         
         NSBundle *imageBundle = [SVProgressHUD imageBundle];
@@ -453,7 +448,7 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 
 - (void)updateHUDFrame {
     // Check if an image or progress ring is displayed
-    BOOL imageUsed = (self.imageView.image) && !(self.imageView.hidden) && (self.imageViewSize.height > 0 && self.imageViewSize.width > 0);
+    BOOL imageUsed = (self.imageView.image) && !(self.imageView.hidden);
     BOOL progressUsed = self.imageView.hidden;
     
     // Calculate size of string
@@ -484,8 +479,9 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     CGFloat contentHeight = 0.0f;
     
     if (imageUsed) {
-        imageLabelWidth = labelWidth + self.imageViewSize.width;
-        imageLabelHeight = MAX(labelHeight, self.imageViewSize.height);
+        self.imageView.frame = CGRectMake(0, 0, self.imageView.image.size.width, self.imageView.image.size.height);
+        imageLabelWidth = labelWidth + SVProgressHUDImageLabelSpacing + self.imageView.image.size.width;
+        imageLabelHeight = MAX(labelHeight, self.imageView.image.size.height);
     }
     
     if(progressUsed) {
@@ -530,8 +526,8 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
         centerY = CGRectGetMidY(self.hudView.bounds);
     }
     self.statusLabel.frame = labelRect;
-    self.statusLabel.center = CGPointMake(CGRectGetMidX(self.hudView.bounds) + self.imageViewSize.width/2.0, centerY);
-    self.imageView.center = CGPointMake(SVProgressHUDVerticalSpacing + self.imageViewSize.width/2.0, centerY);
+    self.statusLabel.center = CGPointMake(CGRectGetMidX(self.hudView.bounds) + CGRectGetWidth(self.imageView.bounds)/2.0 + SVProgressHUDImageLabelSpacing/2.0, centerY);
+    self.imageView.center = CGPointMake(SVProgressHUDHorizontalSpacing + CGRectGetWidth(self.imageView.bounds)/2.0, centerY);
     
     [CATransaction commit];
 }
@@ -1334,13 +1330,9 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
 }
 
 - (UIImageView*)imageView {
-    if(_imageView && !CGSizeEqualToSize(_imageView.bounds.size, _imageViewSize)) {
-        [_imageView removeFromSuperview];
-        _imageView = nil;
-    }
     
     if(!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, _imageViewSize.width, _imageViewSize.height)];
+        _imageView = [[UIImageView alloc] init];
         _imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     if(!_imageView.superview) {
