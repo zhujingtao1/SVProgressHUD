@@ -526,7 +526,7 @@ static const CGFloat SVProgressHUDImageLabelSpacing = 10.0f;
         centerY = CGRectGetMidY(self.hudView.bounds);
     }
     self.statusLabel.frame = labelRect;
-    self.statusLabel.center = CGPointMake(CGRectGetMidX(self.hudView.bounds) + CGRectGetWidth(self.imageView.bounds)/2.0 + SVProgressHUDImageLabelSpacing/2.0, centerY);
+    self.statusLabel.center = CGPointMake(CGRectGetMidX(self.hudView.bounds) + (imageUsed ? (CGRectGetWidth(self.imageView.bounds)/2.0 + SVProgressHUDImageLabelSpacing/2.0) : 0), centerY);
     self.imageView.center = CGPointMake(SVProgressHUDHorizontalSpacing + CGRectGetWidth(self.imageView.bounds)/2.0, centerY);
     
     [CATransaction commit];
